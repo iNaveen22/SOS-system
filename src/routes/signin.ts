@@ -1,10 +1,11 @@
+import "dotenv/config"
 import { prisma } from "../prisma";
 import { Router } from "express";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
-
+const JWT_SECRET=process.env.JWT_SECERET
 const router = Router();
-const JWT_SECRET = "123321";
+
 
 router.post("/signin", async (req, res) => {
     try {
@@ -30,7 +31,7 @@ router.post("/signin", async (req, res) => {
 
         const token = jwt.sign(
             { userId: user.id },
-            JWT_SECRET,
+            JWT_SECRET!,
             { expiresIn: "7d" }
         );
 

@@ -30,7 +30,7 @@ export const processSOSAfterDelay = (sosId: string) => {
     console.log(`User: ${sos.user.name}`);
     console.log(`Location: ${mapsLink}`);
 
-    // TODO:
+    
     // sendSMS()
     // makeCall()
   }, 30000);

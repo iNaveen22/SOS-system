@@ -1,3 +1,7 @@
+import "dotenv/config";
 import { PrismaClient } from "@prisma/client";
-export declare const prisma: PrismaClient<import(".prisma/client").Prisma.PrismaClientOptions, never, import("@prisma/client/runtime/client").DefaultArgs>;
+import { PrismaNeon } from "@prisma/adapter-neon";
+export declare const prisma: PrismaClient<{
+    adapter: PrismaNeon;
+}, never, import("@prisma/client/runtime/client").DefaultArgs>;
 //# sourceMappingURL=prisma.d.ts.map

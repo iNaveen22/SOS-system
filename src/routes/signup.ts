@@ -1,12 +1,16 @@
+import "dotenv/config"
 import { prisma } from "../prisma";
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken'
 import { Router } from "express";
+const JWT_SECRETs:string | undefined=process.env.JWT_SECRET
 
 const router = Router();
-
+console.log("yha tak to aa bya");
 router.post("/signup", async (req, res) => {
-    const JWT_SECRET = "123321";
+
+    console.log("backend signup is correcttt");
+    
     try {
         const { name, email, password, phone } = req.body;
 
@@ -23,7 +27,7 @@ router.post("/signup", async (req, res) => {
 
         const hashedPassword = await bcrypt.hash(password, 10);
 
-        const user = prisma.user.create({
+        const user = await prisma.user.create({
             data: {
                 name,
                 email,
@@ -34,9 +38,10 @@ router.post("/signup", async (req, res) => {
 
         const token = jwt.sign(
             { userId : (await user).id },
-            JWT_SECRET,
+            JWT_SECRETs!,
             { expiresIn: "7d"}
         );
+
 
         res.json({
             success: true,

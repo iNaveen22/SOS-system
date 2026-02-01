@@ -3,13 +3,16 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+require("dotenv/config");
 const prisma_1 = require("../prisma");
 const bcryptjs_1 = __importDefault(require("bcryptjs"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const express_1 = require("express");
+const JWT_SECRETs = process.env.JWT_SECRET;
 const router = (0, express_1.Router)();
+console.log("yha tak to aa bya");
 router.post("/signup", async (req, res) => {
-    const JWT_SECRET = "123321";
+    console.log("backend signup is correcttt");
     try {
         const { name, email, password, phone } = req.body;
         if (!name || !email || !password) {
@@ -22,7 +25,7 @@ router.post("/signup", async (req, res) => {
             return res.status(400).json({ error: "Email already registered" });
         }
         const hashedPassword = await bcryptjs_1.default.hash(password, 10);
-        const user = prisma_1.prisma.user.create({
+        const user = await prisma_1.prisma.user.create({
             data: {
                 name,
                 email,
@@ -30,7 +33,7 @@ router.post("/signup", async (req, res) => {
                 phone
             },
         });
-        const token = jsonwebtoken_1.default.sign({ userId: (await user).id }, JWT_SECRET, { expiresIn: "7d" });
+        const token = jsonwebtoken_1.default.sign({ userId: (await user).id }, JWT_SECRETs, { expiresIn: "7d" });
         res.json({
             success: true,
             token,

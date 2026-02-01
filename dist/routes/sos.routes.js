@@ -8,8 +8,10 @@ const router = (0, express_1.Router)();
 router.post("/start", auth_1.authMiddleware, async (req, res) => {
     try {
         const { triggerType } = req.body;
-        //@ts-ignore
-        const userId = req.user.id;
+        const userId = req.userId;
+        if (!userId) {
+            return res.status(401).json({ error: "Unauthorized" });
+        }
         const lastLocation = await prisma_1.prisma.userLocation.findUnique({
             where: { userId },
         });

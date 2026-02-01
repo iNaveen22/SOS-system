@@ -7,8 +7,11 @@ const router = (0, express_1.Router)();
 router.post("/cancel", auth_1.authMiddleware, async (req, res) => {
     try {
         const { sosId, reason } = req.body;
-        //@ts-ignore
-        const userId = req.user.id;
+        const userId = req.userId;
+        if (!userId)
+            return res.status(401).json({ error: "Unauthorized" });
+        if (!sosId)
+            return res.status(400).json({ error: "sosId required" });
         const sos = await prisma_1.prisma.sOSEvent.findFirst({
             where: { id: sosId, userId },
         });
@@ -35,4 +38,5 @@ router.post("/cancel", auth_1.authMiddleware, async (req, res) => {
         res.status(500).json({ error: "Failed to cancel SOS" });
     }
 });
+exports.default = router;
 //# sourceMappingURL=cancelSOS.routes.js.map

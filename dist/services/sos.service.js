@@ -26,7 +26,6 @@ const processSOSAfterDelay = (sosId) => {
         console.log("🚨 SENDING ALERTS 🚨");
         console.log(`User: ${sos.user.name}`);
         console.log(`Location: ${mapsLink}`);
-        // TODO:
         // sendSMS()
         // makeCall()
     }, 30000);

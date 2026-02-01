@@ -1,15 +1,18 @@
 import { Router } from "express";
 import { prisma } from "../prisma";
-import { authMiddleware } from "../middlewares/auth";
+import { authMiddleware, AuthRequest } from "../middlewares/auth";
 import { processSOSAfterDelay } from "../services/sos.service";
 
 const router = Router();
 
-router.post("/start", authMiddleware, async (req, res) => {
+router.post("/start", authMiddleware, async (req: AuthRequest, res) => {
   try {
     const { triggerType } = req.body;
-    //@ts-ignore
-    const userId = req.user!.id;
+    const userId = req.userId;
+
+    if(!userId){
+      return res.status(401).json({ error: "Unauthorized" });
+    }
 
     const lastLocation = await prisma.userLocation.findUnique({
       where: { userId },

@@ -12,4 +12,5 @@ router.get("/me", auth_1.authMiddleware, async (req, res) => {
     });
     res.json(user);
 });
+exports.default = router;
 //# sourceMappingURL=me.js.map

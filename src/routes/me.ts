@@ -1,10 +1,10 @@
 import { prisma } from "../prisma";
 import { Router } from "express";
-import { authMiddleware } from "../middlewares/auth";
+import { authMiddleware, AuthRequest } from "../middlewares/auth";
 
 const router = Router();
 
-router.get("/me", authMiddleware, async (req, res) => {
+router.get("/me", authMiddleware, async (req: AuthRequest, res) => {
   const user = await prisma.user.findUnique({
     //@ts-ignore
     where: { id: req.userId },
@@ -13,3 +13,5 @@ router.get("/me", authMiddleware, async (req, res) => {
 
   res.json(user);
 });
+
+export default router;

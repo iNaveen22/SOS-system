@@ -1,3 +1,4 @@
+import "dotenv/config"
 import { Request, Response, NextFunction } from "express";
 import jwt from "jsonwebtoken";
 
@@ -9,7 +10,7 @@ export interface AuthRequest extends Request {
   userId?: string;
 }
 
-const JWT_SECRET = "123321"
+const JWT_SECRET = process.env.JWT_SECRET;
 
 export const authMiddleware = (
   req: AuthRequest,
@@ -27,7 +28,7 @@ export const authMiddleware = (
   try {
     const decoded = jwt.verify(
       token!,
-      JWT_SECRET
+      JWT_SECRET!
     ) as JwtUserPayload;
     
     req.userId = decoded.userId;

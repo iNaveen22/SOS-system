@@ -1,14 +1,16 @@
 import { prisma } from "../prisma";
 import { Router } from "express";
-import { authMiddleware } from "../middlewares/auth";
+import { authMiddleware, AuthRequest } from "../middlewares/auth";
 
 const router = Router();
 
-router.post("/cancel",authMiddleware, async (req, res) => {
+router.post("/cancel",authMiddleware, async (req: AuthRequest, res) => {
   try {
     const { sosId, reason } = req.body;
-    //@ts-ignore
-    const userId = req.user!.id;
+    const userId = req.userId;
+    if (!userId) return res.status(401).json({ error: "Unauthorized" });
+
+    if (!sosId) return res.status(400).json({ error: "sosId required" });
 
     const sos = await prisma.sOSEvent.findFirst({
       where: { id: sosId, userId },
@@ -39,3 +41,5 @@ router.post("/cancel",authMiddleware, async (req, res) => {
     res.status(500).json({ error: "Failed to cancel SOS" });
   }
 });
+
+export default router;
